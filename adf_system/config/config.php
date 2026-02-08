@@ -30,7 +30,7 @@ $isProduction = (strpos($_SERVER['HTTP_HOST'] ?? '', 'localhost') === false &&
 if ($isProduction) {
     // Production (Hosting) - uses adf_system database prefixed
     define('DB_HOST', 'localhost');
-    define('DB_NAME', 'adfb2574_adf_system');
+    define('DB_NAME', 'adfb2574_adf');
     define('DB_USER', 'adfb2574_adfsystem');
     define('DB_PASS', '@Nnoc2025');
 } else {
