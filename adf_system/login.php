@@ -56,8 +56,21 @@ if (isPost()) {
         require_once 'includes/business_helper.php';
         
         try {
-            $masterPdo = new PDO("mysql:host=" . DB_HOST . ";dbname=adf_system", DB_USER, DB_PASS);
-            $masterPdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            // Try to connect to adf_system first (for backward compatibility)
+            // If fails, use current DB_NAME instead
+            $masterDbName = 'adf_system';
+            $masterPdo = null;
+            
+            try {
+                $masterPdo = new PDO("mysql:host=" . DB_HOST . ";dbname=adf_system", DB_USER, DB_PASS);
+                $masterPdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            } catch (PDOException $dbE) {
+                // adf_system doesn't exist, use current database instead
+                error_log('adf_system not available, using ' . DB_NAME . ' instead');
+                $masterDbName = DB_NAME;
+                $masterPdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
+                $masterPdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            }
             
             // Get user ID and role from master
             $userStmt = $masterPdo->prepare("SELECT u.id, u.role_id, r.role_code FROM users u LEFT JOIN roles r ON u.role_id = r.id WHERE u.username = ?");
