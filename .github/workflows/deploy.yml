@@ -19,7 +19,7 @@ jobs:
         server: ${{ secrets.FTP_HOST }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: ./
+        local-dir: ./adf_system/
         server-dir: /public_html/adf_system/
         dangerous-clean-slate: false
         exclude: |
